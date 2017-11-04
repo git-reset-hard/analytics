@@ -1,0 +1,16 @@
+order of events for analytics service:
+
+1) user query is submitted (from app-server) with user/queryID/listID 
+2) events are collected and matched to the initial query
+
+parsed events (that have been matched with a query) are sent up to elasticsearch DB for analysis/visualization
+
+notes: analytics service should be built modular enough for new queries to be made on the existing and new datasets put together to upload to elasticsearch
+
+
+RESERVATION r-03fe84e46141e651d 478994730514
+INSTANCE  i-003ddec692665e4ea ami-05355a6c    ip-172-31-19-234.ec2.internal pending app-server  0   m1.large  2017-11-04T18:26:54+0000  us-east-1c  aki-88aa75e1      monitoring-disabled   172.31.19.234 vpc-e0f34598  subnet-08269943 ebs paravirtual     xen 7915ab10-a096-4852-90df-0570e45317f2  sg-21a99753 default true
+NIC eni-6e7113de  subnet-08269943 vpc-e0f34598  478994730514  in-use  172.31.19.234 ip-172-31-19-234.ec2.internal true
+NICATTACHMENT eni-attach-22f458e5 0 attaching 2017-11-04T11:26:54-0700  true
+GROUP sg-21a99753 yelpalytics-mongoDB
+PRIVATEIPADDRESS  172.31.19.234 ip-172-31-19-234.ec2.internal

@@ -1,6 +1,6 @@
-# Project Name
+#analytics
 
-The project description
+Service responsible for analyzing user behavior and correlating with given lists
 
 ## Roadmap
 
