@@ -1,37 +1,36 @@
-const express = require('express');
-const app = express();
-const server = require('http').Server(app);
-const bodyParser = require('body-parser');
-const request = require('request');
-const rp = require('request-promise-native');
-const port = process.env.PORT || 2424;
-const restaurantList = require('./database/restaurantdb.js');
-const appServerDB = require('./database/mysql.js');
-const handleQuery = require('./controller/queryHandler.js');
-
-// import entire SDK
-//var AWS = require('aws-sdk');
-//AWS.config.loadFromPath('./config.json');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+const DBHelpers = require('./helpers/DBHelpers.js');
+const Consumer = require('sqs-consumer');
+// Load the AWS SDK for Node.js
+var AWS = require('aws-sdk');
+// Load credentials and set the region from the JSON file
+AWS.config.loadFromPath('./server/config/config.json');
 
 
 
-app.get('/', (req, res) => {
-  res.status(200);
-  res.send('Serving up webpage');
+const app = Consumer.create({
+  queueUrl: 'https://sqs.us-west-1.amazonaws.com/478994730514/app-serverToAnalytics',
+  handleMessage: (message, done) => {
+    message = JSON.parse(message.Body);
+    if (message.type === 'list') {
+      DBHelpers.listInsert(message, done);
+    }
+    if (message.type === 'query') {
+      DBHelpers.queryInsert(message, done);
+    }
+  },
+  sqs: new AWS.SQS()
 });
-
-
-
-
-
-
-
-
-
-
-server.listen(port, () => {
-  console.log(`(>^.^)> Server now listening on ${port}!`);
+ 
+app.on('error', (err) => {
+  console.log(err.message);
 });
+ 
+app.start();
+console.log('listening for messages...');
+
+
+
+//pull down check-in/reviews from Customer Profiling
+//pull down clicks from Customer Profiling
+
+//match clicks with lists 
